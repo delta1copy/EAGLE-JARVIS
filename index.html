@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EAGLE JARVIS</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#06101d;color:#d9f4ff;font-family:Arial,sans-serif}
+header{padding:22px 30px;border-bottom:1px solid #164766;display:flex;justify-content:space-between;align-items:center}
+h1{margin:0;color:#54dcff;letter-spacing:4px;font-size:25px}
+.status{color:#70ffb0;font-size:13px}
+main{padding:25px;display:grid;grid-template-columns:220px 1fr;gap:20px}
+.panel{background:#0b1b2b;border:1px solid #164766;border-radius:12px;padding:20px}
+h2{font-size:14px;color:#54dcff;letter-spacing:2px}
+.agent{padding:12px 0;border-bottom:1px solid #18364b;font-size:13px}
+.orb-area{text-align:center;padding:30px 10px}
+.orb{width:150px;height:150px;margin:20px auto;border-radius:50%;border:2px solid #54dcff;box-shadow:0 0 35px #087aa8,inset 0 0 30px #087aa8;display:flex;align-items:center;justify-content:center;font-size:44px}
+.subtitle{color:#8eafc6}
+button{background:#10364d;color:#aeeeff;border:1px solid #38bde9;border-radius:7px;padding:12px 18px;margin:6px;cursor:pointer}
+button:hover{background:#165572}
+input{background:#06101d;border:1px solid #24516b;border-radius:7px;color:white;padding:13px;width:70%;max-width:500px}
+#reply{margin:20px auto;max-width:650px;white-space:pre-wrap}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-top:20px}
+.metric{font-size:24px;margin-top:15px}
+footer{text-align:center;padding:20px;color:#658ba3;font-size:12px}
+@media(max-width:650px){main{grid-template-columns:1fr;padding:12px}.cards{grid-template-columns:1fr}header{padding:18px}.orb{width:120px;height:120px}}
+</style>
+</head>
+<body>
+<header>
+  <h1>🦅 EAGLE JARVIS</h1>
+  <div class="status">● LOCAL DASHBOARD ONLINE</div>
+</header>
+<main>
+  <aside class="panel">
+    <h2>COMMAND CENTRE</h2>
+    <div class="agent">◈ Main Assistant</div>
+    <div class="agent">◈ AI Chat</div>
+    <div class="agent">◈ Voice Control</div>
+    <div class="agent">◈ Web Research</div>
+    <div class="agent">◈ Job Centre</div>
+    <div class="agent">◈ PhishGuard</div>
+    <div class="agent">◈ Security Centre</div>
+    <div class="agent">◈ Agent Network</div>
+  </aside>
+  <section>
+    <div class="panel orb-area">
+      <div class="subtitle">PERSONAL AI COMMAND SYSTEM</div>
+      <div class="orb">🦅</div>
+      <h2>GOOD DAY, COMMANDER</h2>
+      <p class="subtitle">EAGLE interface initialized. Awaiting your command.</p>
+      <button onclick="speak()">🔊 TEST VOICE</button>
+      <button onclick="document.getElementById('command').focus()">⌨ ENTER COMMAND</button>
+      <div>
+        <input id="command" placeholder="Type a test command..." onkeydown="if(event.key==='Enter')runCommand()">
+        <button onclick="runCommand()">SEND</button>
+      </div>
+      <div id="reply">Your dashboard is ready for its first test.</div>
+    </div>
+    <div class="cards">
+      <div class="panel"><h2>SYSTEM</h2><div class="metric">ONLINE</div><p class="subtitle">Dashboard loaded locally</p></div>
+      <div class="panel"><h2>AI CONNECTION</h2><div class="metric">NOT CONNECTED</div><p class="subtitle">AI setup comes next</p></div>
+      <div class="panel"><h2>AGENTS</h2><div class="metric">PLANNED</div><p class="subtitle">Real agents will be built in stages</p></div>
+    </div>
+  </section>
+</main>
+<footer>EAGLE JARVIS • DEVELOPMENT MODE • Local interface only — AI and agents are not connected yet.</footer>
+<script>
+async function runCommand(){
+ const input = document.getElementById('command');
+    const reply = document.getElementById('reply');
+    const command = input.value.trim();
+
+    if (!command) {
+        reply.textContent = 'Please type a command first.';
+        return;
+    }
+
+    reply.textContent = 'EAGLE-JARVIS is processing...';
+
+    try {
+        const response = await fetch(
+            `http://127.0.0.1:8011/api/command?text=${encodeURIComponent(command)}`
+        );
+        const data = await response.json();
+        reply.textContent = data.reply;
+    } catch (error) {
+        reply.textContent = 'Connection failed. Check that the backend is running.';
+    }
+}
+function speak() {
+    if (!('speechSynthesis' in window)) {
+        alert('Speech is not supported in this browser.');
+        return;
+    }
+
+    const utterance = new SpeechSynthesisUtterance(
+        'Eagle Jarvis interface is online. Ready for the next development stage.'
+    );
+
+    speechSynthesis.speak(utterance);
+}
+</script>
+</body>
+</html>

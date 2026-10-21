@@ -1,0 +1,75 @@
+﻿import os
+from pathlib import Path
+from datetime import datetime
+
+from dotenv import load_dotenv
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from google import genai
+
+load_dotenv(Path(__file__).resolve().parent.parent / ".env")
+
+app = FastAPI(title="EAGLE JARVIS")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+api_key = os.getenv("GEMINI_API_KEY", "").strip()
+client = genai.Client(api_key=api_key) if api_key else None
+
+
+@app.get("/")
+def home():
+    return {
+        "assistant": "EAGLE JARVIS",
+        "status": "ONLINE",
+        "message": "Your backend is working!",
+        "time": datetime.now().isoformat()
+    }
+
+
+@app.get("/api/health")
+def health():
+    return {
+        "status": "healthy",
+        "backend": "connected",
+        "gemini_configured": client is not None
+    }
+
+
+@app.get("/api/command")
+def command(text: str):
+    if not text.strip():
+        return {"assistant": "EAGLE JARVIS", "reply": "Please enter a message."}
+
+    if client is None:
+        return {
+            "assistant": "EAGLE JARVIS",
+            "reply": "Gemini API key is missing. Check your local .env file."
+        }
+
+    try:
+        response = client.models.generate_content(
+            model="gemini-3.8-flash",
+            contents=text
+        )
+
+        answer = response.text or "I couldn't generate a response. Try again."
+
+        return {
+            "assistant": "EAGLE JARVIS",
+            "your_command": text,
+            "reply": answer
+        }
+
+    except Exception:
+        return {
+            "assistant": "EAGLE JARVIS",
+            "reply": "Gemini could not respond. Check your API key, internet connection, model availability, and API quota."
+        }
+

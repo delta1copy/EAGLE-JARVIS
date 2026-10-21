@@ -1,0 +1,81 @@
+{
+  "summary": {
+    "project_root": "C:\\Users\\chara\\OneDrive\\Desktop\\EAGLE-JARVIS",
+    "started_at": "2026-10-21T03:18:24+05:30",
+    "finished_at": "2026-10-21T09:21:00+05:30",
+    "elapsed_seconds": 21761.11,
+    "scheduled_duration_seconds": 21600,
+    "interval_seconds": 600,
+    "rounds_completed": 2,
+    "findings_total_across_rounds": 0,
+    "check_errors_total": 0,
+    "stopped_early_or_interrupted": false,
+    "notes": [
+      "This is a local static audit, not a penetration test or guarantee of security.",
+      "Backend health checks contact only http://127.0.0.1:8010/api/health; no Gemini command is sent.",
+      "Sensitive .env and credential files are skipped; reports omit matching secret values.",
+      "The scan does not install packages or modify/delete project source files.",
+      "Repeated checks do not guarantee that the scan will discover every possible issue."
+    ]
+  },
+  "rounds": [
+    {
+      "summary": {
+        "round": 1,
+        "started_at": "2026-10-21T03:18:24+05:30",
+        "files_discovered": 4,
+        "python_files_parsed": 3,
+        "python_syntax_errors": 0,
+        "text_files_scanned": 4,
+        "sensitive_files_skipped": 0,
+        "dashboard_localhost_ports": {
+          "index.html": [
+            "8010"
+          ]
+        },
+        "errors": [],
+        "backend_health": {
+          "url": "http://127.0.0.1:8010/api/health",
+          "http_status": 200,
+          "response": "{\"status\":\"healthy\",\"backend\":\"connected\",\"gemini_configured\":true}"
+        },
+        "findings_by_severity": {},
+        "findings_total": 0,
+        "error_count": 0,
+        "duration_seconds": 0.09,
+        "finished_at": "2026-10-21T03:18:24+05:30"
+      },
+      "findings": []
+    },
+    {
+      "summary": {
+        "round": 2,
+        "started_at": "2026-10-21T07:48:50+05:30",
+        "files_discovered": 4,
+        "python_files_parsed": 3,
+        "python_syntax_errors": 0,
+        "text_files_scanned": 4,
+        "sensitive_files_skipped": 0,
+        "dashboard_localhost_ports": {
+          "index.html": [
+            "8010"
+          ]
+        },
+        "errors": [],
+        "backend_health": {
+          "url": "http://127.0.0.1:8010/api/health",
+          "http_status": 200,
+          "response": "{\"status\":\"healthy\",\"backend\":\"connected\",\"gemini_configured\":true}"
+        },
+        "findings_by_severity": {},
+        "findings_total": 0,
+        "error_count": 0,
+        "duration_seconds": 0.24,
+        "finished_at": "2026-10-21T07:48:50+05:30"
+      },
+      "findings": []
+    }
+  ],
+  "findings_across_rounds": [],
+  "check_errors_across_rounds": []
+}

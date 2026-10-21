@@ -1,0 +1,37 @@
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from datetime import datetime
+
+app = FastAPI(title="EAGLE JARVIS")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+@app.get("/")
+def home():
+    return {
+        "assistant": "EAGLE JARVIS",
+        "status": "ONLINE",
+        "message": "Your backend is working!",
+        "time": datetime.now().isoformat()
+    }
+
+@app.get("/api/health")
+def health():
+    return {
+        "status": "healthy",
+        "backend": "connected"
+    }
+
+@app.get("/api/command")
+def command(text: str):
+    return {
+        "assistant": "EAGLE JARVIS",
+        "your_command": text,
+        "reply": f"I received your command: {text}"
+    }

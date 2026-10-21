@@ -1,0 +1,30 @@
+{
+  "summary": {
+    "project_root": "C:\\Users\\chara\\OneDrive\\Desktop\\EAGLE-JARVIS",
+    "started_at": "2026-10-21T03:14:35",
+    "files_discovered": 3,
+    "python_files_parsed": 2,
+    "python_files_with_syntax_errors": 0,
+    "text_files_scanned": 3,
+    "sensitive_files_skipped": 0,
+    "frontend_localhost_ports": {
+      "index.html": [
+        "8010"
+      ]
+    },
+    "pip_audit": "Skipped: pip-audit is not installed; scanner did not install packages.",
+    "capability_review": [
+      "This is a static audit, not a penetration test and not a guarantee that the app is secure.",
+      "AI quality and memory cannot be proven from source inspection alone; test them interactively.",
+      "Do not automatically execute shell commands suggested by an AI model.",
+      "For microphone, calendar, email, and computer-control features, require explicit user permission and clear confirmations for consequential actions.",
+      "Dashboard file detected: manually test loading states, network failures, and user-visible error messages.",
+      "Python web-app entry file detected: test health and command endpoints separately."
+    ],
+    "findings_by_severity": {},
+    "findings_total": 0,
+    "duration_seconds": 0.06,
+    "finished_at": "2026-10-21T03:14:35"
+  },
+  "findings": []
+}

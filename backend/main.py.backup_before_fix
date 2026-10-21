@@ -1,0 +1,113 @@
+import os
+from pathlib import Path
+from datetime import datetime
+
+from dotenv import load_dotenv
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from google import genai
+
+# Load environment variables from the project root .env file
+load_dotenv(Path(__file__).resolve().parent.parent / ".env")
+
+app = FastAPI(title="EAGLE JARVIS")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+api_key = os.getenv("GEMINI_API_KEY", "").strip()
+client = genai.Client(api_key=api_key) if api_key else None
+
+
+@app.get("/")
+def home():
+    return {
+        "assistant": "EAGLE JARVIS",
+        "status": "ONLINE",
+        "message": "Your backend is working!",
+        "time": datetime.now().isoformat(),
+    }
+
+
+@app.get("/api/health")
+def health():
+    return {
+        "status": "healthy",
+        "backend": "connected",
+        "gemini_configured": client is not None,
+    }
+
+
+@app.get("/api/command")
+def command(text: str):
+    clean_text = text.strip()
+    lower_text = clean_text.lower()
+
+    if not clean_text:
+        return {
+            "assistant": "EAGLE JARVIS",
+            "reply": "Please enter a message.",
+        }
+
+    # Respond to greetings locally without calling Gemini
+    greetings = {
+        "hi",
+        "hello",
+        "hey",
+        "hi eagle",
+        "hello eagle",
+        "hey eagle",
+        "good morning",
+        "good morning eagle",
+        "good afternoon",
+        "good afternoon eagle",
+        "good evening",
+        "good evening eagle",
+    }
+
+    if lower_text in greetings:
+        return {
+            "assistant": "EAGLE JARVIS",
+            "your_command": clean_text,
+            "reply": "Hello! EAGLE JARVIS is online. How can I help?",
+        }
+
+    if client is None:
+        return {
+            "assistant": "EAGLE JARVIS",
+            "reply": "Gemini API key is missing. Check your local .env file.",
+        }
+
+    try:
+        response = client.interactions.create(
+            timeout=45,
+            model="gemini-3.8-flash",
+            input=clean_text,
+            generation_config={
+                "thinking_level": "low",
+                "max_output_tokens": 300,
+            },
+        )
+
+        answer = response.output_text or (
+            "I couldn't generate a response. Try again."
+        )
+
+        return {
+            "assistant": "EAGLE JARVIS",
+            "your_command": clean_text,
+            "reply": answer,
+        }
+
+    except Exception as e:
+        print("Gemini error:", type(e).__name__, str(e)[:500])
+
+        return {
+            "assistant": "EAGLE JARVIS",
+            "reply": "Gemini could not respond. Check the backend terminal for the error.",
+        }
